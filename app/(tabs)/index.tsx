@@ -1,80 +1,99 @@
-import { Image } from 'expo-image';
-import { StyleSheet, Pressable } from 'react-native';
-import { Link } from 'expo-router';
+import { useState } from "react";
+import { StyleSheet, TextInput, Pressable, Text, View, Alert } from "react-native";
+import { ThemedView } from "@/components/themed-view";
+import { ThemedText } from "@/components/themed-text";
+import { Link, router } from "expo-router";
 
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+export default function LoginScreen() {
+  const [usuario, setUsuario] = useState("");
+  const [contrasena, setContrasena] = useState("");
 
-export default function HomeScreen() {
+  const handleLogin = () => {
+    if (!usuario || !contrasena) {
+      Alert.alert("Error", "Debes llenar todos los campos.");
+      return;
+    }
+
+    router.replace("/Inicio");
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <ThemedView style={styles.container}>
+      <View style={styles.innerContainer}>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Usuario"
+          placeholderTextColor="#ccc"
+          value={usuario}
+          onChangeText={setUsuario}
         />
-      }>
-      
-      {/* Contenedor del Título */}
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">¡Bienvenido a App Movies!</ThemedText>
-      </ThemedView>
 
-      {/* Contenedor del contenido y botón */}
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText>
-          ¡Bienvenido a nuestra aplicacion de películas!
-          Aquí encontrarás una variedad para ti que seguro te encantará
-          Ponte cómodo y ve por tus palomitas!
-     
-        </ThemedText>
+        <TextInput
+          style={styles.input}
+          placeholder="Contraseña"
+          placeholderTextColor="#ccc"
+          secureTextEntry
+          value={contrasena}
+          onChangeText={setContrasena}
+        />
 
-        {/* Botón de navegación usando Link */}
-        {/* href="/explore" dirige al archivo explore.tsx dentro de (tabs) */}
-        <Link href="/explore" asChild>
-          <Pressable style={styles.button}>
-            <ThemedText style={styles.buttonText}>Inicio</ThemedText>
+        <Pressable style={styles.loginButton} onPress={handleLogin}>
+          <ThemedText style={styles.loginButtonText}>Ingresar</ThemedText>
+        </Pressable>
+
+        <Link href="/register" asChild>
+          <Pressable>
+            <Text style={styles.registerText}>
+              ¿No tienes cuenta? <Text style={styles.registerLink}>Regístrate</Text>
+            </Text>
           </Pressable>
         </Link>
-      </ThemedView>
 
-    </ParallaxScrollView>
+      </View>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 20,
+  container: {
+    flex: 1,
+    backgroundColor: "black",  // 🔥 Fondo negro total (elimina cualquier blanco)
+    justifyContent: "center",
+    alignItems: "center",
   },
-  stepContainer: {
-    gap: 16, // Espacio entre el texto y el botón
-    marginBottom: 8,
-    alignItems: 'center',
+  innerContainer: {
+    width: "90%",
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-  // Estilos nuevos para el botón
-  button: {
-    backgroundColor: '#0a7ea4',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
+  input: {
+    height: 50,
+    backgroundColor: "#1a1a1a",
+    borderColor: "red",
+    borderWidth: 1.5,
     borderRadius: 8,
-    marginTop: 10,
-    elevation: 3,
+    paddingHorizontal: 15,
+    color: "white",
+    marginBottom: 15,
   },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
+  loginButton: {
+    backgroundColor: "red",
+    paddingVertical: 14,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  loginButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  registerText: {
+    marginTop: 15,
+    textAlign: "center",
+    color: "#bbb",
+  },
+  registerLink: {
+    color: "red",
+    fontWeight: "bold",
   },
 });

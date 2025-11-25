@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { StyleSheet, TextInput, Pressable, Alert, Text } from "react-native";
+import { StyleSheet, TextInput, Pressable, Alert, Text, View } from "react-native";
 import { ThemedView } from "@/components/themed-view";
 import { ThemedText } from "@/components/themed-text";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { Picker } from "@react-native-picker/picker";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router"; // 👈 IMPORTANTE
 
 export default function RegisterScreen() {
   const [nombre, setNombre] = useState("");
@@ -31,7 +31,8 @@ export default function RegisterScreen() {
       return;
     }
 
-    Alert.alert("Registro exitoso", `Bienvenido, ${nombre}`);
+    // 🔥 Navegar a INICIO después del registro
+    router.push("/Inicio");
   };
 
   return (
@@ -45,7 +46,7 @@ export default function RegisterScreen() {
       <TextInput
         style={styles.input}
         placeholder="Escribe tu nombre"
-        placeholderTextColor="#999"
+        placeholderTextColor="#888"
         value={nombre}
         onChangeText={setNombre}
       />
@@ -55,7 +56,7 @@ export default function RegisterScreen() {
       <TextInput
         style={styles.input}
         placeholder="Nombre de usuario"
-        placeholderTextColor="#999"
+        placeholderTextColor="#888"
         value={usuario}
         onChangeText={setUsuario}
         autoCapitalize="none"
@@ -66,7 +67,7 @@ export default function RegisterScreen() {
       <TextInput
         style={styles.input}
         placeholder="Crea una contraseña"
-        placeholderTextColor="#999"
+        placeholderTextColor="#888"
         secureTextEntry={true}
         value={contrasena}
         onChangeText={setContrasena}
@@ -74,18 +75,21 @@ export default function RegisterScreen() {
 
       {/* Género */}
       <ThemedText style={styles.label}>Género</ThemedText>
-      <Picker
-        selectedValue={genero}
-        onValueChange={(itemValue) => setGenero(itemValue)}
-        style={styles.picker}
-      >
-        <Picker.Item label="Selecciona tu género" value="" />
-        <Picker.Item label="Masculino" value="M" />
-        <Picker.Item label="Femenino" value="F" />
-        <Picker.Item label="Otro" value="O" />
-      </Picker>
+      <View style={styles.pickerWrapper}>
+        <Picker
+          selectedValue={genero}
+          onValueChange={(itemValue) => setGenero(itemValue)}
+          style={styles.picker}
+          dropdownIconColor="#ff0000"
+        >
+          <Picker.Item label="Selecciona tu género" value="" color="#000" />
+          <Picker.Item label="Masculino" value="M" color="#000" />
+          <Picker.Item label="Femenino" value="F" color="#000" />
+          <Picker.Item label="Otro" value="O" color="#000" />
+        </Picker>
+      </View>
 
-      {/* Fecha de nacimiento */}
+      {/* Fecha */}
       <ThemedText style={styles.label}>Fecha de nacimiento</ThemedText>
 
       <Pressable
@@ -105,15 +109,16 @@ export default function RegisterScreen() {
             setMostrarPickerFecha(false);
             if (selectedDate) setFechaNacimiento(selectedDate);
           }}
+          themeVariant="dark"
         />
       )}
 
-      {/* Botón Registrar */}
+      {/* Botón */}
       <Pressable style={styles.registerButton} onPress={handleRegister}>
         <ThemedText style={styles.registerButtonText}>Registrarme</ThemedText>
       </Pressable>
 
-      {/* Ir al login */}
+      {/* Login */}
       <Link href="/explore" asChild>
         <Pressable>
           <ThemedText style={styles.loginRedirect}>
@@ -131,46 +136,56 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     gap: 10,
+    backgroundColor: "black",
   },
   title: {
     textAlign: "center",
     marginBottom: 15,
+    color: "#ff0000",
+    fontWeight: "bold",
+    fontSize: 28,
   },
   label: {
     fontSize: 16,
     fontWeight: "600",
+    color: "white",
   },
   input: {
     height: 50,
-    borderColor: "#ccc",
-    borderWidth: 1,
+    borderColor: "#ff0000",
+    borderWidth: 1.5,
     borderRadius: 8,
     paddingHorizontal: 16,
-    backgroundColor: "#fff",
-    color: "#000",
+    backgroundColor: "#1a1a1a",
+    color: "white",
     fontSize: 16,
   },
-  picker: {
-    backgroundColor: "#fff",
+  pickerWrapper: {
+    borderWidth: 1.5,
+    borderColor: "#ff0000",
     borderRadius: 8,
+    overflow: "hidden",
+    backgroundColor: "#fff",
+  },
+  picker: {
+    color: "black",
     height: 50,
-    marginBottom: 5,
   },
   dateButton: {
     height: 50,
-    borderColor: "#ccc",
-    borderWidth: 1,
+    borderColor: "#ff0000",
+    borderWidth: 1.5,
     borderRadius: 8,
     justifyContent: "center",
     paddingHorizontal: 16,
-    backgroundColor: "#fff",
+    backgroundColor: "#1a1a1a",
   },
   dateButtonText: {
     fontSize: 16,
-    color: "#000",
+    color: "white",
   },
   registerButton: {
-    backgroundColor: "#0a7ea4",
+    backgroundColor: "#ff0000",
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: "center",
@@ -185,10 +200,10 @@ const styles = StyleSheet.create({
     marginTop: 15,
     fontSize: 16,
     textAlign: "center",
-    color: "#555",
+    color: "#ccc",
   },
   loginRedirectLink: {
-    color: "#0a7ea4",
+    color: "#ff0000",
     fontWeight: "bold",
   },
 });

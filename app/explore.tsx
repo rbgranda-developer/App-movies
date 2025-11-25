@@ -1,112 +1,121 @@
-import { StyleSheet, Text, TextInput, Pressable, Alert } from 'react-native';
+import { StyleSheet, Text, TextInput, Pressable, Alert, Image, View, ScrollView } from 'react-native';
 import { useState } from 'react';
-
-import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Link } from 'expo-router'; // 👈 Import necesario
+import { Link } from 'expo-router';
 
-export default function TabTwoScreen() {
+export default function ExploreScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    if (username === '' || password === '') {
+    if (!username || !password) {
       Alert.alert('Error', 'Por favor ingresa usuario y contraseña');
       return;
     }
+
     Alert.alert('Éxito', `Bienvenido, ${username}`);
   };
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="person.fill"
-          style={styles.headerImage}
-        />
-      }>
-      
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Iniciar Sesión</ThemedText>
-      </ThemedView>
+    <ScrollView style={{ flex: 1, backgroundColor: 'black' }}>
+      <ThemedView style={styles.container}>
 
-      <ThemedView style={styles.formContainer}>
-        <ThemedText style={styles.label}>Usuario</ThemedText>
-        <TextInput
-          style={styles.input}
-          placeholder="Escribe tu usuario"
-          placeholderTextColor="#999"
-          value={username}
-          onChangeText={setUsername}
-          autoCapitalize="none"
-        />
+        {/* LOGO */}
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('@/assets/images/moviesland.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+        </View>
 
-        <ThemedText style={styles.label}>Contraseña</ThemedText>
-        <TextInput
-          style={styles.input}
-          placeholder="Escribe tu contraseña"
-          placeholderTextColor="#999"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={true}
-        />
+        {/* TÍTULO */}
+        <ThemedText type="title" style={styles.title}>
+          Iniciar Sesión
+        </ThemedText>
 
-        <Pressable style={styles.loginButton} onPress={handleLogin}>
-          <ThemedText style={styles.loginButtonText}>Ingresar</ThemedText>
-        </Pressable>
+        {/* FORMULARIO */}
+        <ThemedView style={styles.formContainer}>
+          <ThemedText style={styles.label}>Usuario</ThemedText>
+          <TextInput
+            style={styles.input}
+            placeholder="Escribe tu usuario"
+            placeholderTextColor="#888"
+            value={username}
+            onChangeText={setUsername}
+            autoCapitalize="none"
+          />
 
-        {/* 🔹 Texto para registro */}
-        <Link href="/register" asChild>
-          <Pressable>
-            <ThemedText style={styles.registerText}>
-              ¿No tienes cuenta? <Text style={styles.registerLink}>Regístrate</Text>
-            </ThemedText>
+          <ThemedText style={styles.label}>Contraseña</ThemedText>
+          <TextInput
+            style={styles.input}
+            placeholder="Escribe tu contraseña"
+            placeholderTextColor="#888"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
+
+          <Pressable style={styles.loginButton} onPress={handleLogin}>
+            <ThemedText style={styles.loginButtonText}>Ingresar</ThemedText>
           </Pressable>
-        </Link>
+
+          <Link href="/register" asChild>
+            <Pressable>
+              <ThemedText style={styles.registerText}>
+                ¿No tienes cuenta? <Text style={styles.registerLink}>Regístrate</Text>
+              </ThemedText>
+            </Pressable>
+          </Link>
+        </ThemedView>
 
       </ThemedView>
-
-    </ParallaxScrollView>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+  container: {
+    paddingHorizontal: 20,
+    paddingTop: 40,
+    backgroundColor: 'black',
   },
-  titleContainer: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 20,
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  logo: {
+    width: 260,
+    height: 260,
+  },
+  title: {
+    textAlign: 'center',
+    marginVertical: 10,
+    color: '#ff0000',
+    fontWeight: 'bold',
   },
   formContainer: {
+    marginTop: 10,
     gap: 12,
   },
   label: {
     fontSize: 16,
-    marginBottom: 4,
     fontWeight: '600',
+    color: 'white',
   },
   input: {
     height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
+    borderColor: '#ff0000',
+    borderWidth: 1.5,
     borderRadius: 8,
     paddingHorizontal: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#1a1a1a',
+    color: 'white',
     fontSize: 16,
-    color: '#000',
   },
   loginButton: {
-    backgroundColor: '#0a7ea4',
+    backgroundColor: '#ff0000',
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',
@@ -121,10 +130,10 @@ const styles = StyleSheet.create({
     marginTop: 15,
     fontSize: 16,
     textAlign: 'center',
-    color: '#555',
+    color: '#cccccc',
   },
   registerLink: {
-    color: '#0a7ea4',
+    color: '#ff0000',
     fontWeight: 'bold',
   },
 });
